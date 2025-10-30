@@ -37,8 +37,8 @@ export const SimpleSettings: React.FC = () => {
     setIsScanning(true);
     const filesByYear = new Map<number, Map<string, QuestionFile>>();
 
-    // 2023年から2025年まで、1月/5月/9月のファイルをチェック
-    const years = [2023, 2024, 2025];
+    // 2022年から2025年まで、1月/5月/9月のファイルをチェック
+    const years = [2022, 2023, 2024, 2025];
     const months = ['01', '05', '09'];
 
     for (const year of years) {

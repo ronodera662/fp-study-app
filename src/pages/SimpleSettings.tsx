@@ -37,8 +37,8 @@ export const SimpleSettings: React.FC = () => {
     setIsScanning(true);
     const filesByYear = new Map<number, Map<string, QuestionFile>>();
 
-    // 2022年から2025年まで、1月/5月/9月のファイルをチェック
-    const years = [2022, 2023, 2024, 2025];
+    // 2021年から2025年まで、1月/5月/9月のファイルをチェック
+    const years = [2021, 2022, 2023, 2024, 2025];
     const months = ['01', '05', '09'];
 
     for (const year of years) {
@@ -68,6 +68,35 @@ export const SimpleSettings: React.FC = () => {
       if (yearFiles.size > 0) {
         filesByYear.set(year, yearFiles);
       }
+    }
+
+    // オリジナル頻出問題ファイルをチェック
+    const originalYear = 2026; // オリジナル問題用の特別な年として扱う
+    const originalFiles = new Map<string, QuestionFile>();
+    const originalFileNumbers = ['01', '02'];
+
+    for (const num of originalFileNumbers) {
+      const path = `/data/fp2_original_frequent_${num}.json`;
+      try {
+        const response = await fetch(path);
+        const contentType = response.headers.get('content-type');
+        if (response.status === 200 && contentType?.includes('application/json')) {
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0) {
+            originalFiles.set(`original_${num}`, {
+              path,
+              name: `頻出${num}`,
+              grade: '2'
+            });
+          }
+        }
+      } catch (error) {
+        console.log(`File not found or invalid: ${path}`);
+      }
+    }
+
+    if (originalFiles.size > 0) {
+      filesByYear.set(originalYear, originalFiles);
     }
 
     // データを保存（ここでは年ごとの構造を保持）
@@ -301,14 +330,23 @@ export const SimpleSettings: React.FC = () => {
                 availableFiles.map((yearData) => (
                   <div key={yearData.year} className="border-2 border-gray-300 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-lg font-bold text-gray-900">FP2級 {yearData.year}年</h3>
-                      <span className="text-xs text-gray-700 font-medium">{yearData.files.size}回分</span>
+                      <h3 className="text-lg font-bold text-gray-900">
+                        {yearData.year === 2026 ? 'FP2級 オリジナル頻出問題' : `FP2級 ${yearData.year}年`}
+                      </h3>
+                      <span className="text-xs text-gray-700 font-medium">
+                        {yearData.year === 2026 ? `${yearData.files.size}セット` : `${yearData.files.size}回分`}
+                      </span>
                     </div>
                     <div className="grid grid-cols-3 gap-2">
                       {Array.from(yearData.files.entries()).map(([month, file]) => (
                         <button
                           key={month}
-                          onClick={() => handleImportData(file.path, `FP2級 ${yearData.year}年${file.name}`)}
+                          onClick={() => handleImportData(
+                            file.path,
+                            yearData.year === 2026
+                              ? `FP2級 オリジナル頻出問題 ${file.name}`
+                              : `FP2級 ${yearData.year}年${file.name}`
+                          )}
                           disabled={isImporting}
                           className="p-3 text-center border-2 border-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >

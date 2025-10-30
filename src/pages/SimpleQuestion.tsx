@@ -125,8 +125,9 @@ export const SimpleQuestion: React.FC = () => {
       // answersステートには既に全ての解答が含まれているはず
       // ただし、ステートの更新が反映されていない場合に備えて確認
       let allAnswers = answers;
-      if (answers.length < questions.length) {
+      if (answers.length < questions.length && selectedAnswer !== null) {
         // ステートの更新がまだ反映されていない場合のみ追加
+        const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
         allAnswers = [...answers, {
           id: generateId(),
           questionId: currentQuestion.id,

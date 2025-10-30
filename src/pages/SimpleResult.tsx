@@ -108,13 +108,6 @@ export const SimpleResult: React.FC = () => {
     navigate('/');
   };
 
-  const getAccuracyColor = (acc: number): string => {
-    if (acc >= 80) return 'text-green-600';
-    if (acc >= 60) return 'text-blue-600';
-    if (acc >= 40) return 'text-yellow-600';
-    return 'text-red-600';
-  };
-
   const incorrectQuestions = questionsWithAnswers.filter(item => !item.answer.isCorrect);
 
   return (

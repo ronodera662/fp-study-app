@@ -4,6 +4,10 @@ export type { UserAnswer, UserSettings } from './user';
 export type { UserProgress } from './progress';
 export type { DailyStats, CategoryStats, OverallStats } from './statistics';
 
+// 型のインポート（interface内で使用するため）
+import type { Question } from './question';
+import type { UserAnswer } from './user';
+
 // 学習モード型
 export type StudyMode = 'random' | 'category' | 'year' | 'weakness' | 'review';
 

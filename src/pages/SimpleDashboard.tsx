@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { db } from '../services/database';
-import { statisticsService } from '../services/statisticsService';
 import type { UserSettings } from '../types';
 
 export const SimpleDashboard: React.FC = () => {

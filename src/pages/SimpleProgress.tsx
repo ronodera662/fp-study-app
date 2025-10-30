@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '../components/common/Card';
 import { db } from '../services/database';
-import { statisticsService } from '../services/statisticsService';
 import { CATEGORIES } from '../constants/categories';
 import type { UserAnswer } from '../types';
 
@@ -124,29 +123,6 @@ export const SimpleProgress: React.FC = () => {
       });
     }
     setWeeklyActivity(weekActivity);
-  };
-
-  const getMasteryLevelText = (level: number): string => {
-    if (level >= 5) return '完全習得';
-    if (level === 4) return '習得済み';
-    if (level === 3) return '理解';
-    if (level >= 1) return '学習中';
-    return '未学習';
-  };
-
-  const getMasteryLevelColor = (level: number): string => {
-    if (level >= 5) return 'text-green-700';
-    if (level === 4) return 'text-green-600';
-    if (level === 3) return 'text-blue-600';
-    if (level >= 1) return 'text-yellow-600';
-    return 'text-gray-600';
-  };
-
-  const getAccuracyColor = (accuracy: number): string => {
-    if (accuracy >= 80) return 'text-green-600';
-    if (accuracy >= 60) return 'text-blue-600';
-    if (accuracy >= 40) return 'text-yellow-600';
-    return 'text-red-600';
   };
 
   const maxWeeklyCount = Math.max(...weeklyActivity.map(d => d.count), 1);

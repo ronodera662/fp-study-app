@@ -55,7 +55,7 @@ export const progressService = {
   },
 
   // 習熟度の計算（0-5の6段階）
-  calculateMasteryLevel(progress: UserProgress, isCorrect: boolean): number {
+  calculateMasteryLevel(progress: UserProgress, isCorrect: boolean): 0 | 1 | 2 | 3 | 4 | 5 {
     const { totalAttempts, correctCount } = progress;
 
     // 新しい回答を加味した統計
@@ -143,10 +143,12 @@ export const progressService = {
   // 習熟度別の問題数取得
   async getMasteryStats(): Promise<Record<number, number>> {
     const allProgress = await db.userProgress.toArray();
-    const stats = { 0: 0, 1: 0, 2: 0, 3: 0 };
+    const stats: Record<number, number> = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
     allProgress.forEach((p) => {
-      stats[p.masteryLevel]++;
+      if (p.masteryLevel in stats) {
+        stats[p.masteryLevel]++;
+      }
     });
 
     return stats;
